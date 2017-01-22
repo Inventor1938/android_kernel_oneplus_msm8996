@@ -1067,13 +1067,13 @@ static ssize_t synaptics_s1302_radd_write(struct file *file, const char __user *
 {
 	int buf[128];
     int ret,i;
-	struct synaptics_ts_data *ts = tc_g;
+    struct synaptics_ts_data *ts = tc_g;
     int temp_block,wbyte;
     char reg[30];
 
     ret = sscanf(buffer,"%x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x",\
-    &buf[0],&buf[1],&buf[2],&buf[3],&buf[4],&buf[5],&buf[6],&buf[7],&buf[8],&buf[9],\
-    &buf[10],&buf[11],&buf[12],&buf[13],&buf[14],&buf[15],&buf[16],&buf[17]);
+        &buf[0],&buf[1],&buf[2],&buf[3],&buf[4],&buf[5],&buf[6],&buf[7],&buf[8],&buf[9],\
+        &buf[10],&buf[11],&buf[12],&buf[13],&buf[14],&buf[15],&buf[16],&buf[17]);
     for (i = 0;i < ret;i++)
     {
         printk("buf[i]=0x%x,",buf[i]);
@@ -1099,7 +1099,7 @@ static ssize_t synaptics_s1302_radd_write(struct file *file, const char __user *
     }
     else
         block = temp_block;
-	return count;
+    return count;
 }
 static int synaptics_s1302_radd_open(struct inode *inode, struct file *file)
 {
@@ -2014,7 +2014,7 @@ static int synaptics_ts_probe(struct i2c_client *client, const struct i2c_device
 	TPD_ERR("CURRENT_FIRMWARE_ID = 0x%x\n", CURRENT_FIRMWARE_ID);
     sprintf(ts->fw_id,"0x%x",CURRENT_FIRMWARE_ID);
 
-	memset(ts->fw_name,TP_FW_NAME_MAX_LEN,0);
+	memset(ts->fw_name,0,TP_FW_NAME_MAX_LEN);
 	strcpy(ts->fw_name,"tp/fw_synaptics_touchkey.img");
 	TPD_DEBUG("synatpitcs_fw: fw_name = %s \n",ts->fw_name);
 
