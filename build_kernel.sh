@@ -107,26 +107,26 @@ select choice in default LINARO-aarch64-linux-android-4.9 LINARO-aarch64-linux-a
 do
 case "$choice" in
   "default")
-    RELEASE="${KERNEL}.${DEVICE}.${VERSION}"
+    RELEASE="${KERNEL}.${DEVICE}.EAS.${VERSION}"
     break;;
   "LINARO-aarch64-linux-android-4.9")
     export CROSS_COMPILE="$TOOLCHAIN_DIR/aarch64-linux-android-linaro-4.9-kernel/bin/aarch64-linux-android-"
-    RELEASE="${KERNEL}.${DEVICE}.${VERSION}-LINARO-4.9"
+    RELEASE="${KERNEL}.${DEVICE}.EAS.${VERSION}-LINARO-4.9"
     break;;
   "LINARO-aarch64-linux-android-5.x")
     export CROSS_COMPILE="$TOOLCHAIN_DIR/aarch64-linux-android-linaro-5.x-kernel/bin/aarch64-linux-android-"
-    RELEASE="${KERNEL}.${DEVICE}.${VERSION}-LINARO-5.x"
+    RELEASE="${KERNEL}.${DEVICE}.EAS.${VERSION}-LINARO-5.x"
     break;;
   "LINARO-aarch64-linux-android-6.x")
     export CROSS_COMPILE="$TOOLCHAIN_DIR/aarch64-linux-android-linaro-6.x-kernel/bin/aarch64-linux-android-"
-    RELEASE="${KERNEL}.${DEVICE}.${VERSION}-LINARO-6.x"
+    RELEASE="${KERNEL}.${DEVICE}.EAS.${VERSION}-LINARO-6.x"
     break;;
   "UBER-aarch64-linux-android-4.9")
-    RELEASE="${KERNEL}.${DEVICE}.${VERSION}-UBER-4.9"
+    RELEASE="${KERNEL}.${DEVICE}.EAS.${VERSION}-UBER-4.9"
     export CROSS_COMPILE="$TOOLCHAIN_DIR/aarch64-linux-android-uber-4.9-kernel/bin/aarch64-linux-android-"
     break;;
   "UBER-aarch64-linux-android-5.3")
-    RELEASE="${KERNEL}.${DEVICE}.${VERSION}-UBER-5.3"
+    RELEASE="${KERNEL}.${DEVICE}.EAS.${VERSION}-UBER-5.3"
     export CROSS_COMPILE="$TOOLCHAIN_DIR/aarch64-linux-android-uber-5.3-kernel/bin/aarch64-linux-android-"
     break;;
 esac
