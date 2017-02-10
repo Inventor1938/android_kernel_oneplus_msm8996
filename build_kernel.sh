@@ -23,8 +23,8 @@ DTBIMAGE="dtb"
 # Kernel Details
 KERNEL=Zenith
 DEVICE="OP3"
-VERSION="001"
-RELEASE="${KERNEL}.${DEVICE}.EAS.EXPERIMENTAL.${VERSION}"
+VERSION="002"
+RELEASE="${KERNEL}.${DEVICE}.EAS.${VERSION}"
 
 # Vars
 TOOLCHAIN_DIR="${HOME}/vertex/prebuilts/gcc/linux-x86/aarch64"
