@@ -102,31 +102,14 @@ echo "-----------------"
 echo -e "${restore}"
 
 echo "Pick Toolchain..."
-select choice in default LINARO-aarch64-linux-android-4.9 LINARO-aarch64-linux-android-5.x LINARO-aarch64-linux-android-6.x UBER-aarch64-linux-android-4.9 UBER-aarch64-linux-android-5.3 UBER-aarch64-linux-android-6.0
-#select choice in LINARO-aarch64-linux-gnu-4.9.3-05012016 LINARO-aarch64-linux-gnu-5.3.1-05012016 HYPER-aarch64-6.x-10032016
+select choice in default LINARO-aarch64-linux-gnu-6.x 
 do
 case "$choice" in
   "default")
     break;;
-  "LINARO-aarch64-linux-android-4.9")
-    export CROSS_COMPILE="$TOOLCHAIN_DIR/aarch64-linux-android-linaro-4.9-kernel/bin/aarch64-linux-android-"
-    RELEASE="${RELEASE}-LINARO-4.9"
-    break;;
-  "LINARO-aarch64-linux-android-5.x")
-    export CROSS_COMPILE="$TOOLCHAIN_DIR/aarch64-linux-android-linaro-5.x-kernel/bin/aarch64-linux-android-"
-    RELEASE="${RELEASE}-LINARO-5.x"
-    break;;
-  "LINARO-aarch64-linux-android-6.x")
-    export CROSS_COMPILE="$TOOLCHAIN_DIR/aarch64-linux-android-linaro-6.x-kernel/bin/aarch64-linux-android-"
+  "LINARO-aarch64-linux-gnu-6.x")
+    export CROSS_COMPILE="$TOOLCHAIN_DIR/aarch64-linux-gnu-6.x-kernel-linaro/bin/aarch64-linux-gnu-"
     RELEASE="${RELEASE}-LINARO-6.x"
-    break;;
-  "UBER-aarch64-linux-android-4.9")
-    RELEASE="${RELEASE}-UBER-4.9"
-    export CROSS_COMPILE="$TOOLCHAIN_DIR/aarch64-linux-android-uber-4.9-kernel/bin/aarch64-linux-android-"
-    break;;
-  "UBER-aarch64-linux-android-5.3")
-    RELEASE="${RELEASE}-UBER-5.3"
-    export CROSS_COMPILE="$TOOLCHAIN_DIR/aarch64-linux-android-uber-5.3-kernel/bin/aarch64-linux-android-"
     break;;
 esac
 done
