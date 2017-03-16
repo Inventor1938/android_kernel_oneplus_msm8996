@@ -33,22 +33,21 @@ unsigned long boosted_cpu_util(int cpu);
 #define cpufreq_disable_fast_switch(x)
 
 #define UP_RATE_LIMIT				1000
+#define DOWN_RATE_LIMIT				1000
 
 /* Frequency cap for target_load1 in KHz */
-#define LOAD1_CAP					1113600
+#define LOAD1_CAP					1324800
 /* Frequency cap for target_load2 in KHz */
-#define LOAD2_CAP					1324800
-#define TARGET_LOAD_1				50
+#define LOAD2_CAP					1593600
+#define TARGET_LOAD_1				75
 #define TARGET_LOAD_2				90
-#define DOWN_RATE_LIMIT				5000
 
 /* Frequency cap for target_load1 in KHz */
 #define LOAD1_CAP_BIGC				1324800
 /* Frequency cap for target_load2 in KHz */
 #define LOAD2_CAP_BIGC				1555200
-#define TARGET_LOAD_1_BIGC 			25
+#define TARGET_LOAD_1_BIGC 			50
 #define TARGET_LOAD_2_BIGC 			75
-#define DOWN_RATE_LIMIT_BIGC		10000
 
 #define NRGGOV_KTHREAD_PRIORITY		25
 
@@ -624,13 +623,10 @@ static ssize_t load1_cap_store(struct gov_attr_set *attr_set,
 					const char *buf, size_t count)
 {
 	struct nrggov_tunables *tunables = to_nrggov_tunables(attr_set);
-	long value;
+	unsigned int value;
 
 	if (kstrtouint(buf, 10, &value))
 		return -EINVAL;
-
-	value = min(max(307200,value), 2150400);
-	
 	
 	if (value == tunables->load1_cap)
 		return count;
@@ -644,13 +640,10 @@ static ssize_t load2_cap_store(struct gov_attr_set *attr_set,
 					const char *buf, size_t count)
 {
 	struct nrggov_tunables *tunables = to_nrggov_tunables(attr_set);
-	long value;
+	unsigned int value;
 
 	if (kstrtouint(buf, 10, &value))
 		return -EINVAL;
-
-	value = min(max(307200,value), 2150400);
-	
 	
 	if (value == tunables->load2_cap)
 		return count;
@@ -821,16 +814,15 @@ initialize:
 		tunables->target_load2 = TARGET_LOAD_2;
 		tunables->load1_cap = LOAD1_CAP;
 		tunables->load2_cap = LOAD2_CAP;
-		tunables->down_rate_limit_us = DOWN_RATE_LIMIT;
 	} else {
 		tunables->target_load1 = TARGET_LOAD_1_BIGC;
 		tunables->target_load2 = TARGET_LOAD_2_BIGC;
 		tunables->load1_cap = LOAD1_CAP_BIGC;
 		tunables->load2_cap = LOAD2_CAP_BIGC;
-		tunables->down_rate_limit_us = DOWN_RATE_LIMIT_BIGC;
 	}
 
 	tunables->up_rate_limit_us = UP_RATE_LIMIT;
+	tunables->down_rate_limit_us = DOWN_RATE_LIMIT;
 	
 	lat = policy->cpuinfo.transition_latency / NSEC_PER_USEC;
 	if (lat) {
