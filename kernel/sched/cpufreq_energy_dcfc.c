@@ -39,14 +39,14 @@ unsigned long boosted_cpu_util(int cpu);
 #define LOAD1_CAP					1324800
 /* Frequency cap for target_load2 in KHz */
 #define LOAD2_CAP					1593600
-#define TARGET_LOAD_1				75
-#define TARGET_LOAD_2				90
+#define TARGET_LOAD_1				50
+#define TARGET_LOAD_2				75
 
 /* Frequency cap for target_load1 in KHz */
 #define LOAD1_CAP_BIGC				1324800
 /* Frequency cap for target_load2 in KHz */
 #define LOAD2_CAP_BIGC				1555200
-#define TARGET_LOAD_1_BIGC 			50
+#define TARGET_LOAD_1_BIGC 			25
 #define TARGET_LOAD_2_BIGC 			75
 
 #define NRGGOV_KTHREAD_PRIORITY		25
@@ -203,38 +203,22 @@ static void nrggov_update_commit(struct nrggov_policy *sg_policy, u64 time,
  * next_freq (as calculated above) is returned, subject to policy min/max and
  * cpufreq driver limitations.
  */
-static unsigned int get_next_freq(struct nrggov_cpu *sg_cpu,
+static unsigned int get_next_freq(struct nrggov_policy *sg_policy,
 				  unsigned long util, unsigned long max)
 {
-	struct nrggov_policy *sg_policy = sg_cpu->sg_policy;
 	struct cpufreq_policy *policy = sg_policy->policy;
 	struct nrggov_tunables *tunables = sg_policy->tunables;
 	unsigned int freq = arch_scale_freq_invariant() ?
 				policy->cpuinfo.max_freq : policy->cur;
 	unsigned long load = util / max * 100;
-	unsigned int target_load1 = tunables->target_load1;
-	unsigned int target_load2 = tunables->target_load2;
-	unsigned int load1_cap = tunables->load1_cap;
-	unsigned int load2_cap = tunables->load2_cap;
 	
-	if (policy->cpu < 2){
-		if(load <= target_load1){
-			freq = load1_cap;
-		} else if (load <= target_load2 && load > target_load1){
-			freq = load2_cap;
-		} else {
-			freq = arch_scale_freq_invariant() ?
-				policy->cpuinfo.max_freq : policy->cur;	
-		}
+	if(load <= tunables->target_load1){
+		freq = tunables->load1_cap;
+	} else if (load <= tunables->target_load2 && load > tunables->target_load1){
+		freq = tunables->load2_cap;
 	} else {
-		if(load <= target_load1){
-			freq = load1_cap;
-		} else if (load <= target_load2 && load > target_load1){
-			freq = load2_cap;
-		} else {
-			freq = arch_scale_freq_invariant() ?
-				policy->cpuinfo.max_freq : policy->cur;
-		}
+		freq = arch_scale_freq_invariant() ?
+			policy->cpuinfo.max_freq : policy->cur;	
 	}
 	
 	freq = (freq + (freq >> 1)) * util / max;
@@ -333,7 +317,7 @@ static void nrggov_update_single(struct update_util_data *hook, u64 time,
 	} else {
 		nrggov_get_util(&util, &max, hook->cpu, time);
 		nrggov_iowait_boost(sg_cpu, &util, &max);
-		next_f = get_next_freq(sg_cpu, util, max);
+		next_f = get_next_freq(sg_policy, util, max);
 	}
 	nrggov_update_commit(sg_policy, time, cpu, remote, next_f);
 }
@@ -377,7 +361,7 @@ static unsigned int nrggov_next_freq_shared(struct nrggov_cpu *sg_cpu)
 		nrggov_iowait_boost(j_sg_cpu, &util, &max);
 	}
 
-	return get_next_freq(sg_cpu, util, max);
+	return get_next_freq(sg_policy, util, max);
 }
 
 static void nrggov_update_shared(struct update_util_data *hook, u64 time,
